@@ -16,8 +16,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.post("/", async (req, res) => {
-    
+router.post("/new", async (req, res) => {  
     try {
         const user = await UserModel.findById(req.body.userID);
         const stock = new StockModel(req.body);
@@ -28,18 +27,36 @@ router.post("/", async (req, res) => {
     } catch (err) {
         res.json(err);
     }
-})
+});
 
 
-router.put("/", async (req, res) => {
-    const stock = new StockModel(req.body);
+router.put("/buy", async (req, res) => {
+    const price = req.body.price;
+    const quantity = req.body.quantity;
+
     try {
-        const response = await stock.save();
-        res.json(response);
+        const stock = await StockModel.findOne({userOwner: req.body.userID, name: req.body.name});
+        stock.purchases.push({price: price, quantity: quantity});
+        await stock.save();
+        res.json({stock});
     } catch (err) {
         res.json(err);
     }
-})
+});
+
+router.put("/sell", async (req, res) => {
+    const price = req.body.price;
+    const quantity = req.body.quantity;
+
+    try {
+        const stock = await StockModel.findOne({userOwner: req.body.userID, name: req.body.name});
+        stock.sales.push({price: price, quantity: quantity});
+        await stock.save();
+        res.json({stock});
+    } catch (err) {
+        res.json(err);
+    }
+});
 
 
 

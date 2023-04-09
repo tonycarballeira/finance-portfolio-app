@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const StockSchema = new mongoose.Schema({
-    name: { type: String, required: true},
+    name: { type: String, required: true },
     purchases: [{ 
         created: { type: Date, default: Date.now},
         price: Number,
