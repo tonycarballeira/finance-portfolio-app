@@ -6,11 +6,33 @@ import { UserModel } from '../models/Users.js';
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-    const user = await UserModel.findById(req.body.userID);
 
     try {
-        const response = await StockModel.find({});
+        const response = await StockModel.find({userOwner: req.body.userID});
         res.json(response);
+    } catch (err) {
+        res.json(err);
+    }
+});
+
+router.get("/stocksPurchased/ids", async (req, res) => {
+
+    try {
+        const user = await UserModel.findById(req.body.userID);
+        res.json({stocksPurchased: user?.stocksPurchased});
+    } catch (err) {
+        res.json(err);
+    }
+});
+
+router.get("/stocksPurchased", async (req, res) => {
+
+    try {
+        const user = await UserModel.findById(req.body.userID);
+        const stocksPurchased = await StockModel.find({
+            _id: {$in: user.stocksPurchased},
+        });
+        res.json({stocksPurchased: user.stocksPurchased});
     } catch (err) {
         res.json(err);
     }
