@@ -25,7 +25,7 @@ router.get("/stocksPurchased/ids", async (req, res) => {
     }
 });
 
-router.get("/stocksPurchased", async (req, res) => {
+router.get("/stockPurchased", async (req, res) => {
 
     try {
         const user = await UserModel.findById(req.body.userID);
@@ -80,7 +80,18 @@ router.put("/sell", async (req, res) => {
     }
 });
 
+router.delete("/stocksPurchased/id", async (req, res) => {
 
+    try {
+        const user = await UserModel.findById(req.body.userID);
+        const pip = await StockModel.findByIdAndRemove(req.body._id);
+        user.stocksPurchased.pull({_id: req.body._id});
+        await user.save(); 
+        res.json({user});
+    } catch (err) {
+        res.json(err);
+    }
+});
 
 
 export { router as stocksRouter };
