@@ -51,6 +51,19 @@ router.post("/new", async (req, res) => {
     }
 });
 
+router.delete("/stocksPurchased/id", async (req, res) => {
+
+    try {
+        const user = await UserModel.findById(req.body.userID);
+        const pip = await StockModel.findByIdAndRemove(req.body._id);
+        user.stocksPurchased.pull({_id: req.body._id});
+        await user.save(); 
+        res.json({user});
+    } catch (err) {
+        res.json(err);
+    }
+});
+
 
 router.put("/buy", async (req, res) => {
     const price = req.body.price;
@@ -80,13 +93,27 @@ router.put("/sell", async (req, res) => {
     }
 });
 
-router.delete("/stocksPurchased/id", async (req, res) => {
+
+
+router.put("/watchList/id", async (req, res) => {
 
     try {
         const user = await UserModel.findById(req.body.userID);
-        const pip = await StockModel.findByIdAndRemove(req.body._id);
-        user.stocksPurchased.pull({_id: req.body._id});
-        await user.save(); 
+        user.watchList.push({name: req.body.name});
+        await user.save();
+        res.json({user});
+    } catch (err) {
+        res.json(err);
+    }
+});
+
+
+router.delete("/watchList/id", async (req, res) => {
+
+    try {
+        const user = await UserModel.findById(req.body.userID);
+        user.watchList.pull({_id: req.body._id});
+        await user.save();
         res.json({user});
     } catch (err) {
         res.json(err);
