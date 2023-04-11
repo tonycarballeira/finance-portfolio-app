@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
+import './navbar.css'
 
 const Navbar = () => {
 
@@ -21,12 +22,17 @@ const Navbar = () => {
       </div>
 
       <div className='navbar__search'>
-        <div className='navbar__searchContainer'>
-
+        <div className='navbar__searchContainer'> 
+          <input placeholder="Search" type="text"/>
         </div>
       </div>
+      <div className='navbar__menuItems'>
+        <Link to="/portfolio">Portfolio</Link>
+        {!cookies.access_token ? (<Link to="/auth">Login</Link>) 
+        : <button onClick={logout}>Logout</button>}
+      </div>
       
-      {!cookies.access_token ? (<Link to="/auth">Login</Link>) : <button onClick={logout}>Logout</button>}
+      
       
     </div>
   )
