@@ -13,10 +13,12 @@ function App() {
           <Navbar />
         </div>  
         <div className='app__body'>
-          <Routes>        
-              <Route path="/" element={<Home />} />
-              <Route path="/auth" element={<Auth />} />          
-          </Routes>
+          <div className='app__container'>
+            <Routes>        
+                <Route path="/" element={<Home />} />
+                <Route path="/auth" element={<Auth />} />          
+            </Routes>
+          </div>         
         </div> 
       </Router>
     </div>
