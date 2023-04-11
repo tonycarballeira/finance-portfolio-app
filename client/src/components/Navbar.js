@@ -15,8 +15,17 @@ const Navbar = () => {
   };
 
   return (
-    <div className='navbar'>
-      <Link to="/">Home</Link>
+    <div className='navbar__wrapper'>
+      <div className='navbar__logo'>
+        <Link to="/">Home</Link>
+      </div>
+
+      <div className='navbar__search'>
+        <div className='navbar__searchContainer'>
+
+        </div>
+      </div>
+      
       {!cookies.access_token ? (<Link to="/auth">Login</Link>) : <button onClick={logout}>Logout</button>}
       
     </div>

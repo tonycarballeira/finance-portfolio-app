@@ -2,8 +2,11 @@ import express from 'express';
 import mongoose from 'mongoose';
 import { StockModel } from '../models/Stocks.js';
 import { UserModel } from '../models/Users.js';
+import { verifyToken } from "./users.js"
 
 const router = express.Router();
+
+// STOCKS
 
 router.get("/", async (req, res) => {
 
@@ -38,6 +41,8 @@ router.get("/stockPurchased", async (req, res) => {
     }
 });
 
+// STOCK CREATE / DELETE
+
 router.post("/new", async (req, res) => {  
     try {
         const user = await UserModel.findById(req.body.userID);
@@ -64,6 +69,7 @@ router.delete("/stocksPurchased/id", async (req, res) => {
     }
 });
 
+// STOCK BUY / SELL
 
 router.put("/buy", async (req, res) => {
     const price = req.body.price;
@@ -93,10 +99,9 @@ router.put("/sell", async (req, res) => {
     }
 });
 
-
+// WATCH LIST ADD / REMOVE
 
 router.put("/watchList/id", async (req, res) => {
-
     try {
         const user = await UserModel.findById(req.body.userID);
         user.watchList.push({name: req.body.name});
@@ -107,9 +112,7 @@ router.put("/watchList/id", async (req, res) => {
     }
 });
 
-
 router.delete("/watchList/id", async (req, res) => {
-
     try {
         const user = await UserModel.findById(req.body.userID);
         user.watchList.pull({_id: req.body._id});
