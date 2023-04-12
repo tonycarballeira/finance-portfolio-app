@@ -2,7 +2,7 @@
     border: 1px solid orange;
     flex: 0.7;
     max-width:100%;
-  max-height:100%;
+    max-height:100%;
 }
 
 .newsfeed__currentValue h1 {
@@ -11,4 +11,9 @@
 
 .newsfeed__currentValue p {
     margin-top: 0;
+   }
+
+   .newsfeed__chartSection {
+    display: flex;
+    flex-direction: column;
    }

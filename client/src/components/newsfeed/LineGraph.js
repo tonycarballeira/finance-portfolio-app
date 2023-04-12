@@ -34,6 +34,7 @@ const LineGraph = () => {
 
 
     const options = {
+        maintainAspectRatio: false, 
         responsive: true,
         plugins: { 
             legend: { display: false },
