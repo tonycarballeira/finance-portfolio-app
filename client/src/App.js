@@ -13,15 +13,15 @@ function App() {
         <div className='app__navbar'>
           <Navbar />
         </div>  
-        <div className='app__body'>
-          <div className='app__container'>
+        {/* <div className='app__body'>
+          <div className='app__container'> */}
             <Routes>        
                 <Route path="/" element={<Home />} />
                 <Route path="/auth" element={<Auth />} /> 
                 <Route path="/portfolio" element={<Portfolio />} />         
             </Routes>
-          </div>         
-        </div> 
+          {/* </div>         
+        </div>  */}
       </Router>
     </div>
   );
