@@ -13,7 +13,7 @@ module.exports = {
         1: "1px",
       },
       fontFamily: {
-        quicksand: ['Cinzel', 'serif'],
+        quicksand: ['Quicksand', 'sans-serif'],
       },
       gridTemplateRows: {
         7: "repeat(7, minimax(0, 1fr))",
