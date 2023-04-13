@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import './stats.css'
 
+const BASE_URL = ""
+
 const Stats = () => {
 
   const [stockData, setstockData] = useState([]);
