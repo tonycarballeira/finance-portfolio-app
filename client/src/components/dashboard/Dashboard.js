@@ -2,6 +2,8 @@ import React from 'react'
 import Card from '../card/Card';
 import { mockCompanyDetails } from '../../constants/mock';
 import Header from '../Header';
+import Details from '../Details';
+import Overview from '../Overview';
 
 const Dashboard = () => {
   return (
@@ -14,10 +16,14 @@ const Dashboard = () => {
         <Card>Chart</Card>
       </div>
       <div>
-        <Card>Overview</Card>
+        <Overview symbol={mockCompanyDetails.ticker} 
+        price={300} 
+        change={30} 
+        changePercent={10.0}
+        currency={"USD"}/>
       </div>
-      <div className='row-span-2 xl:row-span-3'>
-        <Card>Details</Card>
+      <div className='row-span-2 xl:row-span-3 h-fit'>
+        <Details details={mockCompanyDetails}/>
       </div>
     </div>
   )

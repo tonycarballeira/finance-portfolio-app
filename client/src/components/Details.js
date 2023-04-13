@@ -10,7 +10,7 @@ const Details = ({details}) => {
         exchange: "exchange",
         ipo: "IPO Date",
         marketCapitalization: "Market Cap",
-        finnnhubIndustry: "Industry"
+        finnhubIndustry: "Industry"
     };
 
     const convertMillionToBillion = (number) => {
