@@ -20,9 +20,9 @@ const Dashboard = () => {
         price={300} 
         change={30} 
         changePercent={10.0}
-        currency={"USD"}/>
+        currency={"USD"} />
       </div>
-      <div className='row-span-2 xl:row-span-3 h-fit'>
+      <div className='row-span-2 xl:row-span-3 xl:h-full h-fit'>
         <Details details={mockCompanyDetails}/>
       </div>
     </div>
