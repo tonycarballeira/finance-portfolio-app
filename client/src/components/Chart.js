@@ -2,6 +2,8 @@ import React from 'react'
 import { useState } from 'react'
 import { mockHistoricalData } from '../constants/mock'
 import { convertUnixTimestampToDate } from '../helpers/date-helper';
+import {Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import Card from './card/Card';
 
 const Chart = () => {
 
@@ -18,9 +20,23 @@ const Chart = () => {
     };
 
   return (
-    <div>
-      
-    </div>
+    <Card>
+        <ResponsiveContainer>
+            <AreaChart data={formatData(data)}>
+                <defs>
+                    <linearGradient id="chartColor" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                    </linearGradient>
+                </defs>
+                <Area type="monotone" dataKey="value" stroke="gray"
+                fillOpacity={1} strokeWidth={0.5} fill="url(#chartColor)"/>
+                <Tooltip />
+                <XAxis data={"date"}/>
+                <YAxis domain={["dataMin", "dataMax"]}/>
+            </AreaChart>
+        </ResponsiveContainer>
+    </Card>
   )
 }
 
