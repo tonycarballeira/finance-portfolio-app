@@ -4,8 +4,13 @@ import Home from './pages/home';
 import Auth from './pages/auth';
 import Navbar from './components/navbar/Navbar';
 import Portfolio from './pages/portfolio/portfolio';
+import { useState } from 'react';
+import StockContext from './context/StockContext';
 
 function App() {
+
+  const [stockSymbol, setStockSymbol] = useState("FB");
+
   return (
     <div className="App">
       <Router>  
@@ -15,10 +20,12 @@ function App() {
         </div>  
         {/* <div className='app__body'>
           <div className='app__container'> */}
-            <Routes>        
+            <Routes> 
+              <StockContext.Provider value={{stockSymbol, setStockSymbol}}>    
                 <Route path="/" element={<Home />} />
                 <Route path="/auth" element={<Auth />} /> 
-                <Route path="/portfolio" element={<Portfolio />} />         
+                <Route path="/portfolio" element={<Portfolio />} /> 
+              </StockContext.Provider>   
             </Routes>
           {/* </div>         
         </div>  */}
