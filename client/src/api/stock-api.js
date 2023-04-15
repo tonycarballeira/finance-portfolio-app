@@ -37,7 +37,7 @@ export const fetchQuote = async (stockSymbol) => {
 };
 
 export const fetchHistoricalData = async (stockSymbol, resolution, from, to) => {
-    const url = `${basePath}/stock/candle?symbol=${stockSymbol}&resolution=${resolutionn}
+    const url = `${basePath}/stock/candle?symbol=${stockSymbol}&resolution=${resolution}
     &from=${from}&to=${to}&token=${process.env.REACT_APP_API_KEY}`;
     const response = await fetch(url);
 

@@ -20,13 +20,13 @@ function App() {
         </div>  
         {/* <div className='app__body'>
           <div className='app__container'> */}
-            <Routes> 
-              <StockContext.Provider value={{stockSymbol, setStockSymbol}}>    
+          <StockContext.Provider value={{stockSymbol, setStockSymbol}}> 
+            <Routes>               
                 <Route path="/" element={<Home />} />
                 <Route path="/auth" element={<Auth />} /> 
-                <Route path="/portfolio" element={<Portfolio />} /> 
-              </StockContext.Provider>   
+                <Route path="/portfolio" element={<Portfolio />} />        
             </Routes>
+          </StockContext.Provider> 
           {/* </div>         
         </div>  */}
       </Router>

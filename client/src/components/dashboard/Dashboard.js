@@ -1,11 +1,35 @@
-import React from 'react'
+import React, {useContext, useState, useEffect} from 'react'
 import { mockCompanyDetails } from '../../constants/mock';
 import Header from '../Header';
 import Details from '../Details';
 import Overview from '../Overview';
 import Chart from '../Chart';
+import StockContext from '../../context/StockContext';
+import { fetchStockDetails } from '../../api/stock-api';
 
 const Dashboard = () => {
+
+  const {stockSymbol} = useContext(StockContext);
+
+  const [stockDetails, setStockDetails] = useState({});
+  const [quote, setQuote] = useState({});
+
+
+  useEffect(() => {
+    const updateStockDetails = async () => {
+      try {
+        const result = await fetchStockDetails(stockSymbol);
+        setStockDetails(result);
+      } catch (err){
+        setStockDetails({});   
+        console.log(err);
+      }
+    }
+
+    const updateStockOverview = async () => {}
+
+  }, [stockSymbol])
+
   return (
     <div className="h-screen grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 
     grid-rows-8 md:grid-rows-7 xl:grid-rows-5 auto-rows-fr gap-6 p-10 font-quicksand bg-neutral-100">
