@@ -1,18 +1,55 @@
-import React from 'react'
+import React, {useContext, useEffect} from 'react'
 import { useState } from 'react'
-import { mockHistoricalData } from '../constants/mock'
-import { convertUnixTimestampToDate } from '../helpers/date-helper';
+import { convertUnixTimestampToDate, convertDateToUnixTimestamp, createDate } from '../helpers/date-helper';
 import {Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import Card from './card/Card';
 import ChartFilter from './ChartFilter';
 import { chartConfig } from '../constants/config';  
+import { fetchHistoricalData } from '../api/stock-api';
+import StockContext from '../context/StockContext';
+
+
 
 const Chart = () => {
 
-    const [data, setData] = useState(mockHistoricalData);
+    const [data, setData] = useState([]);
     const [filter, setFilter] = useState("1W");
 
-    const formatData = () => {
+    const {stockSymbol} = useContext(StockContext);
+
+    useEffect(() => {
+        const getDateRange = () => {
+            const {days, weeks, months, years} = chartConfig[filter];
+            const endDate = new Date();
+            const startDate = createDate(endDate, -days, -weeks, -months, -years);
+
+            const startTimestampUnix = convertDateToUnixTimestamp(startDate);   
+            const endTimestampUnix = convertDateToUnixTimestamp(endDate);
+
+            return {startTimestampUnix, endTimestampUnix};
+        };
+
+        const updateChartData = async () => {
+            try {
+              const { startTimestampUnix, endTimestampUnix } = getDateRange();
+              const resolution = chartConfig[filter].resolution;
+              const result = await fetchHistoricalData(
+                stockSymbol,
+                resolution,
+                startTimestampUnix,
+                endTimestampUnix
+              );
+              setData(formatData(result));
+            } catch (error) {
+              setData([]);
+              console.log(error);
+            }
+          };
+      
+          updateChartData();
+    }, [stockSymbol, filter]);
+
+    const formatData = (data) => {
         return data.c.map((item, index) => {
             return {
                 value: item.toFixed(2),
@@ -34,7 +71,7 @@ const Chart = () => {
             })}
         </ul>
         <ResponsiveContainer>
-            <AreaChart data={formatData(data)} margin={{
+            <AreaChart data={data} margin={{
                     top: 20, right: 20, bottom: 50, left: 20,
                 }}>
                 <defs>
