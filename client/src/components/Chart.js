@@ -19,15 +19,18 @@ const Chart = () => {
 
     useEffect(() => {
         const getDateRange = () => {
-            const {days, weeks, months, years} = chartConfig[filter];
+            const { days, weeks, months, years } = chartConfig[filter];
+      
             const endDate = new Date();
             const startDate = createDate(endDate, -days, -weeks, -months, -years);
-
-            const startTimestampUnix = convertDateToUnixTimestamp(startDate);   
+      
+            const startTimestampUnix = convertDateToUnixTimestamp(startDate);
             const endTimestampUnix = convertDateToUnixTimestamp(endDate);
-
-            return {startTimestampUnix, endTimestampUnix};
-        };
+            
+            console.log(chartConfig[filter].resolution);
+            return { startTimestampUnix, endTimestampUnix };
+          };
+      
 
         const updateChartData = async () => {
             try {
@@ -39,6 +42,7 @@ const Chart = () => {
                 startTimestampUnix,
                 endTimestampUnix
               );
+              console.log(endTimestampUnix);
               setData(formatData(result));
             } catch (error) {
               setData([]);
@@ -47,7 +51,7 @@ const Chart = () => {
           };
       
           updateChartData();
-    }, [stockSymbol, filter]);
+        }, [stockSymbol, filter]);  
 
     const formatData = (data) => {
         return data.c.map((item, index) => {

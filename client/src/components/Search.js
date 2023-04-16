@@ -30,7 +30,11 @@ const Search = () => {
     <div className='flex items-center my-4 border-2 rounded-md relative z-50 w-96 bg-white 
     border-neutral-200'>
         <input type="text" value={input} className='w-full px-4 py-2 focus:outline-none rounded-md'
-        placeholder="search stock..." onChange={(event) => {setInput(event.target.value)}}
+        placeholder="search stock..." 
+        onChange={(event) => {
+            setInput(event.target.value)
+            updateBestMatches();
+        }}
         onKeyDown={(event) => {
             if (event.key == "Enter") {
                 updateBestMatches();
