@@ -40,8 +40,9 @@ const Dashboard = () => {
   }, [stockSymbol])
 
   return (
-    <div className="h-screen grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 
-    grid-rows-8 md:grid-rows-7 xl:grid-rows-5 auto-rows-fr gap-6 p-10 font-quicksand bg-neutral-100">
+    <>
+    <div className="h-screen grid md:mt-1 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 
+    grid-rows-8 md:grid-rows-7 xl:grid-rows-5 auto-rows-fr gap-6 pt-10 pl-10 pr-10 font-quicksand bg-neutral-100">
       <div className='col-span-1 md:col-span-2 xl:col-span-3 row-span-1 flex justify-start items-center'>
         <Header name={stockDetails.name}/>
       </div>
@@ -52,13 +53,30 @@ const Dashboard = () => {
         <Overview symbol={stockSymbol} 
         price={quote.pc} 
         change={quote.d} 
-        changePercent={quote.dp}
-        currency={stockDetails.currency} />
+        changePercent={quote.dp} 
+        currency={stockDetails.currency} /> 
       </div>
-      <div className='row-span-2 xl:row-span-3 xl:h-full h-fit'>
+      <div className='row-span-3 xl:row-span-3 xl:h-full'>
         <Details details={stockDetails}/>
       </div>
+      
+      
     </div>
+    <div className="h-screen grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 
+    grid-rows-8 md:grid-rows-7 xl:grid-rows-5 auto-rows-fr gap-5 pt-5 pl-10 pr-10 font-quicksand bg-neutral-100">
+      <div className='md:col-span-2 row-span-4'>
+        <Chart />
+      </div>
+  
+      <div className='h-screen row-span-2 xl:row-span-4 xl:h-full'>
+        <Details details={stockDetails}/>
+      </div>
+      
+      
+    </div>
+    
+    </>
+    
   )
 }
 
