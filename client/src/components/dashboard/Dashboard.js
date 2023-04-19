@@ -6,6 +6,7 @@ import Chart from '../Chart';
 import StockContext from '../../context/StockContext';
 import { fetchStockDetails, fetchQuote } from '../../api/stock-api';
 import BuyStock from '../BuyStock';
+import { useCookies } from 'react-cookie';
 
 const Dashboard = () => {
 
@@ -13,6 +14,8 @@ const Dashboard = () => {
 
   const [stockDetails, setStockDetails] = useState({});
   const [quote, setQuote] = useState({});
+
+  const [cookies, setCookies] = useCookies(["access_token"]);  
 
 
   useEffect(() => {
@@ -63,20 +66,26 @@ const Dashboard = () => {
       
       
     </div>
-    <div className="h-screen grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 
-    grid-rows-8 md:grid-rows-7 xl:grid-rows-5 auto-rows-fr gap-5 pt-5 pl-10 pr-10 font-quicksand bg-neutral-100">
-      <div className='md:col-span-2 row-span-4 h-12'>
-        
-        <BuyStock symbol={stockSymbol} price={quote.pc} />
 
-      </div>
-  
-      <div className='h-screen row-span-2 xl:row-span-4 xl:h-full'>
-        <Details details={stockDetails}/>
-      </div>
-      
-      
-    </div>
+    {cookies.access_token ? (
+       <div className="h-screen grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 
+       grid-rows-8 md:grid-rows-7 xl:grid-rows-5 auto-rows-fr gap-5 pt-5 pl-10 pr-10 font-quicksand bg-neutral-100">
+         <div className='md:col-span-2 row-span-4 h-12'>
+           
+           <BuyStock symbol={stockSymbol} price={quote.pc} />
+   
+         </div>
+     
+         <div className='h-screen row-span-2 xl:row-span-4 xl:h-full'>
+           <Details details={stockDetails}/>
+         </div>
+         
+         
+       </div>
+
+    ) 
+        : <></> }
+   
     
     </>
     

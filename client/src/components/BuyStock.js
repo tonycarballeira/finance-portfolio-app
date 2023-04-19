@@ -24,12 +24,16 @@ const BuyStock = ({symbol, price}) => {
 
     useEffect(() => {
         const fetchBuys = async () => {
-            try {
-              const response = await axios.get("http://localhost:3001/stocks/stocksPurchased");
-              setPurchasedStocks(response.data);
-            } catch (err) {
-              console.log(err);
-            }
+          try {
+            
+            const response = await axios.get(`http://localhost:3001/stocks/stocksPurchased/${userID}`);
+            
+            setPurchasedStocks(response.data);
+          } catch (err) {
+            console.log(err);
+          }
+        };
+        fetchBuys();
     }, []);
   
     const handleChange = (event) => {
@@ -40,19 +44,33 @@ const BuyStock = ({symbol, price}) => {
     const handleSubmit = async (event) => {
       event.preventDefault();
       try {
-        await axios.post(
-          "http://localhost:3001/stocks/new",
-          { ...stock },
-          {
-            headers: { authorization: cookies.access_token },
-          }
-        );
-        setPurchasedStocks([...purchasedStocks, stock]);
-        alert("Stock Purchased");
-        navigate("/portfolio");
+        if(purchasedStocks.filter(e => e.name === {symbol}).length > 0) {
+          await axios.put(
+            "http://localhost:3001/stocks/buy",
+            { ...stock, userID },
+            {
+              headers: { authorization: cookies.access_token },
+            }
+          );
+          console.log(userID);
+          setPurchasedStocks([...purchasedStocks, stock]);
+          alert("Stock Purchased");
+        } else {
+          await axios.post(
+            "http://localhost:3001/stocks/new",
+            { ...stock, userID },
+            {
+              headers: { authorization: cookies.access_token },
+            }
+          );
+          setPurchasedStocks([...purchasedStocks, stock]);
+          alert("Stock Purchased");
+        }
       } catch (error) {
         console.error(error);
       }
+    
+          
     };
   
     return (
@@ -64,7 +82,7 @@ const BuyStock = ({symbol, price}) => {
             type="number"
             id="quantity"
             name="quantity"
-            value={stock.quantity}
+            value={stock.purchases.quantity}
             onChange={handleChange}
           />
           <button type="submit">Buy</button>

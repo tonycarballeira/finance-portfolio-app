@@ -28,14 +28,14 @@ router.get("/stocksPurchased/ids", async (req, res) => {
     }
 });
 
-router.get("/stocksPurchased", async (req, res) => {
+router.get("/stocksPurchased/:userId", async (req, res) => {
 
     try {
-        const user = await UserModel.findById(req.body.userID);
+        const user = await UserModel.findById(req.params.userId);
         const stocksPurchased = await StockModel.find({
             _id: {$in: user.stocksPurchased},
         });
-        res.json({stocksPurchased: user.stocksPurchased});
+        res.status(201).json({stocksPurchased: user?.stocksPurchased});
     } catch (err) {
         res.json(err);
     }
@@ -51,6 +51,7 @@ router.post("/new", async (req, res) => {
         user.stocksPurchased.push(savedStock);
         await user.save();  
         res.json({stocksPurchased: user.stocksPurchased});
+        console.log("api reached");
     } catch (err) {
         res.json(err);
     }
