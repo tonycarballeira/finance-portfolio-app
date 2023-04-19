@@ -25,10 +25,11 @@ const BuyStock = ({symbol, price}) => {
     useEffect(() => {
         const fetchBuys = async () => {
           try {
-            
-            const response = await axios.get(`http://localhost:3001/stocks/stocksPurchased/${userID}`);
+            // console.log(userID);
+            const response = await axios.get(`http://localhost:3001/stocks/${userID}`);
             
             setPurchasedStocks(response.data);
+            console.log(purchasedStocks);
           } catch (err) {
             console.log(err);
           }
@@ -40,11 +41,15 @@ const BuyStock = ({symbol, price}) => {
       const { name, value } = event.target;
       setStock({ ...stock, [name]: value });
     };
+
+    const checkStocks = () => {
+      return purchasedStocks.filter(e => e.name === {symbol}).length > 0
+    }
   
     const handleSubmit = async (event) => {
       event.preventDefault();
       try {
-        if(purchasedStocks.filter(e => e.name === {symbol}).length > 0) {
+        if (checkStocks) {
           await axios.put(
             "http://localhost:3001/stocks/buy",
             { ...stock, userID },

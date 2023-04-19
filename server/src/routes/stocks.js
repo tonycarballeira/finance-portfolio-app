@@ -8,10 +8,11 @@ const router = express.Router();
 
 // STOCKS
 
-router.get("/", async (req, res) => {
+router.get("/:userID", async (req, res) => {
 
-    try {
-        const response = await StockModel.find({userOwner: req.body.userID});
+    try { 
+        const response = await StockModel.find({userOwner: req.params.userID});
+        console.log(response);
         res.json(response);
     } catch (err) {
         res.json(err);
