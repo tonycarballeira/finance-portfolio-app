@@ -28,7 +28,7 @@ router.get("/stocksPurchased/ids", async (req, res) => {
     }
 });
 
-router.get("/stockPurchased", async (req, res) => {
+router.get("/stocksPurchased", async (req, res) => {
 
     try {
         const user = await UserModel.findById(req.body.userID);
