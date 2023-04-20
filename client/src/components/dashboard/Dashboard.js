@@ -55,7 +55,7 @@ const Dashboard = () => {
       </div>
       <div>
         <Overview symbol={stockSymbol} 
-        price={quote.pc} 
+        price={quote.pc}
         change={quote.d} 
         changePercent={quote.dp} 
         currency={stockDetails.currency} /> 
@@ -72,7 +72,7 @@ const Dashboard = () => {
        grid-rows-8 md:grid-rows-7 xl:grid-rows-5 auto-rows-fr gap-5 pt-5 pl-10 pr-10 font-quicksand bg-neutral-100">
          <div className='md:col-span-2 row-span-4 h-12'>
            
-           <BuyStock symbol={stockSymbol} price={quote.pc} />
+           <BuyStock symbol={stockDetails.name} price={quote.pc} />
    
          </div>
      

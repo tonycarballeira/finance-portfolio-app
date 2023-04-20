@@ -12,7 +12,6 @@ router.get("/:userID", async (req, res) => {
 
     try { 
         const response = await StockModel.find({userOwner: req.params.userID});
-        console.log(response);
         res.json(response);
     } catch (err) {
         res.json(err);
@@ -46,6 +45,7 @@ router.get("/stocksPurchased/:userId", async (req, res) => {
 
 router.post("/new", async (req, res) => {  
     try {
+        console.log(req.body);
         const user = await UserModel.findById(req.body.userID);
         const stock = new StockModel(req.body);
         const savedStock = await stock.save();
@@ -74,8 +74,9 @@ router.delete("/stocksPurchased/id", async (req, res) => {
 // STOCK BUY / SELL
 
 router.put("/buy", async (req, res) => {
-    const price = req.body.price;
-    const quantity = req.body.quantity;
+    console.log("hello");
+    const price = req.body.purchases[0].price;
+    const quantity = req.body.purchases[0].quantity;
 
     try {
         const stock = await StockModel.findOne({userOwner: req.body.userID, name: req.body.name});

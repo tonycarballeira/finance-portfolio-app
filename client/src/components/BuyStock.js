@@ -6,15 +6,17 @@ import { useGetUserID } from '../hooks/useGetUserID';
 import { useNavigate } from "react-router-dom";
 
 const BuyStock = ({symbol, price}) => {
+    const [stockName, setStockName] = useState(symbol);
+    const [stockPrice, setStockPrice] = useState(price);
     const userID = useGetUserID();
     const [cookies, _] = useCookies(["access_token"]);
 
     const [purchasedStocks, setPurchasedStocks] = useState([]);
     
     const [stock, setStock] = useState({
-      name: {symbol},
+      name: symbol,
       purchases: [{
-        price: {price},
+        price: price,
         quantity: 0
       }],
       userOwner: userID   
@@ -25,11 +27,10 @@ const BuyStock = ({symbol, price}) => {
     useEffect(() => {
         const fetchBuys = async () => {
           try {
-            // console.log(userID);
             const response = await axios.get(`http://localhost:3001/stocks/${userID}`);
-            
+            console.log("used");
             setPurchasedStocks(response.data);
-            console.log(purchasedStocks);
+
           } catch (err) {
             console.log(err);
           }
@@ -37,30 +38,36 @@ const BuyStock = ({symbol, price}) => {
         fetchBuys();
     }, []);
   
-    const handleChange = (event) => {
-      const { name, value } = event.target;
-      setStock({ ...stock, [name]: value });
-    };
+    // const handleChange = (event) => {
+    //   const quantity = event.target.value;
+      
+    // };
 
-    const checkStocks = () => {
-      return purchasedStocks.filter(e => e.name === {symbol}).length > 0
-    }
+    const handleChange = (event) => {
+      const value = Number(event.target.value);
+      
+      const purchases = [...stock.purchases];
+      
+      purchases[0].quantity = value;
+      setStock({ ...stock, purchases });
+      console.log(cooc);
+    };
   
     const handleSubmit = async (event) => {
       event.preventDefault();
       try {
-        if (checkStocks) {
+        if (purchasedStocks.filter(e => e.name === symbol).length > 0) {
           await axios.put(
             "http://localhost:3001/stocks/buy",
             { ...stock, userID },
             {
               headers: { authorization: cookies.access_token },
             }
-          );
-          console.log(userID);
-          setPurchasedStocks([...purchasedStocks, stock]);
+          );     
+          
           alert("Stock Purchased");
         } else {
+          
           await axios.post(
             "http://localhost:3001/stocks/new",
             { ...stock, userID },
@@ -68,7 +75,8 @@ const BuyStock = ({symbol, price}) => {
               headers: { authorization: cookies.access_token },
             }
           );
-          setPurchasedStocks([...purchasedStocks, stock]);
+          setPurchasedStocks(purchasedStocks => [...purchasedStocks, stock]);
+          console.log(purchasedStocks);
           alert("Stock Purchased");
         }
       } catch (error) {
@@ -86,8 +94,7 @@ const BuyStock = ({symbol, price}) => {
           <input
             type="number"
             id="quantity"
-            name="quantity"
-            value={stock.purchases.quantity}
+            name="purchases.quantity"
             onChange={handleChange}
           />
           <button type="submit">Buy</button>

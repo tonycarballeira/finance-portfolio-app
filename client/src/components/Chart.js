@@ -27,7 +27,6 @@ const Chart = () => {
             const startTimestampUnix = convertDateToUnixTimestamp(startDate);
             const endTimestampUnix = convertDateToUnixTimestamp(endDate);
             
-            console.log(chartConfig[filter].resolution);
             return { startTimestampUnix, endTimestampUnix };
           };
       
@@ -42,7 +41,6 @@ const Chart = () => {
                 startTimestampUnix,
                 endTimestampUnix
               );
-              console.log(endTimestampUnix);
               setData(formatData(result));
             } catch (error) {
               setData([]);
