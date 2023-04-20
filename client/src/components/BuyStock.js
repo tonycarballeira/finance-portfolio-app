@@ -4,10 +4,11 @@ import axios from 'axios';
 import { useCookies } from 'react-cookie';  
 import { useGetUserID } from '../hooks/useGetUserID';
 import { useNavigate } from "react-router-dom";
+import Card from './card/Card';
 
 const BuyStock = ({symbol, price}) => {
-    const [stockName, setStockName] = useState(symbol);
-    const [stockPrice, setStockPrice] = useState(price);
+    // const [stockName, setStockName] = useState(symbol);
+    // const [stockPrice, setStockPrice] = useState(price);
     const userID = useGetUserID();
     const [cookies, _] = useCookies(["access_token"]);
 
@@ -28,7 +29,6 @@ const BuyStock = ({symbol, price}) => {
         const fetchBuys = async () => {
           try {
             const response = await axios.get(`http://localhost:3001/stocks/${userID}`);
-            console.log("used");
             setPurchasedStocks(response.data);
 
           } catch (err) {
@@ -50,7 +50,6 @@ const BuyStock = ({symbol, price}) => {
       
       purchases[0].quantity = value;
       setStock({ ...stock, purchases });
-      console.log(cooc);
     };
   
     const handleSubmit = async (event) => {
@@ -85,21 +84,40 @@ const BuyStock = ({symbol, price}) => {
     
           
     };
-  
+ 
     return (
-      <div className="">
-        <h2>Buy Stock</h2>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="quantity">Amount</label>
-          <input
-            type="number"
-            id="quantity"
-            name="purchases.quantity"
-            onChange={handleChange}
-          />
-          <button type="submit">Buy</button>
-        </form>
-      </div>
+      <Card>
+        <div className='w-full h-full flex flex-col justify-between divide-y-1'>
+          <h2>Buy</h2>
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="quantity">Amount</label>
+            <input
+              type="number"
+              id="quantity"
+              name="purchases.quantity"
+              onChange={handleChange}
+            />
+            <button type="submit">Buy</button>
+          </form>
+        
+
+        
+          <h2>Sell</h2>
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="quantity">Amount</label>
+            <input
+              type="number"
+              id="quantity"
+              name="purchases.quantity"
+              onChange={handleChange}
+            />
+            <button type="submit">Sell</button>
+          </form>
+        </div>
+      
+      
+      </Card>
+      
     );
 }
 
