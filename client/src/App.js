@@ -9,7 +9,7 @@ import StockContext from './context/StockContext';
 
 function App() {
 
-  const [stockSymbol, setStockSymbol] = useState("FB");
+  const [stockSymbol, setStockSymbol] = useState("");
 
   return (
     <div className="App">
