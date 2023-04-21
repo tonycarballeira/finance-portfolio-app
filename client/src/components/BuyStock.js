@@ -6,7 +6,7 @@ import { useGetUserID } from '../hooks/useGetUserID';
 import { useNavigate } from "react-router-dom";
 import Card from './card/Card';
 
-const BuyStock = ({symbol, price}) => {
+const BuyStock = ({symbol, price, details}) => {
     // const [stockName, setStockName] = useState(symbol);
     // const [stockPrice, setStockPrice] = useState(price);
     const userID = useGetUserID();
@@ -84,50 +84,111 @@ const BuyStock = ({symbol, price}) => {
     
           
     };
+
+    const detailsList = {
+      name: "Name",
+      country: "country",
+      currency: "currency",
+      exchange: "exchange",
+      ipo: "IPO Date",
+      marketCapitalization: "Market Cap",
+      finnhubIndustry: "Industry"
+  };
+
+  const convertMillionToBillion = (number) => {
+      return ( number / 1000).toFixed(2);
+  };
  
     return (
-      <Card>
-        <div className='w-full h-full flex flex-col justify-between'>
-          <div className='w-full flex flex-row justify-between'>
-            <h1>{symbol}</h1>
-            <h1>${price}</h1>
-          </div>
-          <form onSubmit={handleSubmit}>
-            <input type="number"
-              id="quantity"
-              name="purchases.quantity"
-              onChange={handleChange} 
-              className="shadow appearance-none border border-teal-500 rounded w-full py-2 
-              px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" placeholder="Amount">
-            </input>
-            <button className="flex-shrink-0 bg-teal-500 hover:bg-teal-600 border-teal-500 hover:border-teal-700 text-sm border-4 text-black py-1 px-2 rounded" type="button">
-              Buy
-            </button>
-          </form>
-        
+      <>
+        <div className='col-span-2 md:col-span-1 xl:col-span-1 row-span-2'>
+          <Card>
+          
+            <div className='w-full h-full flex flex-col justify-between'>
+              <div className='w-full flex flex-row justify-between'>
+                <h1 className="text-purple-500">{symbol}</h1>
+                <h1>${price}</h1>
+              </div>
+              <form onSubmit={handleSubmit}>
+                <input type="number"
+                  id="quantity"
+                  name="purchases.quantity"
+                  onChange={handleChange} 
+                  className="shadow appearance-none border border-teal-500 rounded w-full py-2 
+                  px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" placeholder="Amount">
+                </input>
+                <button className="flex-shrink-0 bg-teal-500 hover:bg-teal-600 border-teal-500 hover:border-teal-700 text-sm border-4 text-black py-1 px-2 rounded" type="button">
+                  Buy
+                </button>
+              </form>
+            
 
-        
-          <div className='w-full flex flex-row justify-between'>
-            <h1>Funds</h1>
-            <h1>Shares:</h1>
-            <h1>Total: ${price}</h1>
-          </div>
-          <form onSubmit={handleSubmit}>
-          <input type="number"
-              id="quantity"
-              name="purchases.quantity"
-              onChange={handleChange} 
-              className="shadow appearance-none border border-red-500 rounded w-full py-2 
-              px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" placeholder="Amount">
-            </input>
-            <button className="flex-shrink-0 bg-red-400 hover:bg-red-700 border-red-400 hover:border-red-700 text-sm border-4 text-black py-1 px-2 rounded" type="button">
-              Sell
-            </button>
-          </form>
+            
+              <div className='w-full flex flex-row justify-between'>
+                <h1 className="text-purple-500">Funds</h1>
+                <h1>Shares:</h1>
+                <h1>Total: ${price}</h1>
+              </div>
+              <form onSubmit={handleSubmit}>
+              <input type="number"
+                  id="quantity"
+                  name="purchases.quantity"
+                  onChange={handleChange} 
+                  className="shadow appearance-none border border-red-500 rounded w-full py-2 
+                  px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" placeholder="Amount">
+                </input>
+                <button className="flex-shrink-0 bg-red-400 hover:bg-red-700 border-red-400 hover:border-red-700 text-sm border-4 text-black py-1 px-2 rounded" type="button">
+                  Sell
+                </button>
+              </form>
+            </div>
+          </Card>
+        </div>
+
+        <div className='col-span-2 row-span-2'>   
+          <Card>
+            <div className='w-full h-full flex flex-row justify-between gap-6'>
+              <div className='w-1/2 rounded-md p-2 border-2 bg-white border-neutral-200 overflow-y-scroll'>
+                <ul className='w-full h-full flex flex-col justify-between divide-y-1'>
+                  <li className='flex-1 flex justify-between items-center'>
+                    <span className='text-purple-500'>Portfolio</span>
+                    <span className='text-purple-500'>Total: ${price}</span>
+                  </li>
+                  {Object.keys(detailsList).map((item) => {
+                      return <li key={item} className='flex-1 flex justify-between items-center'>
+                          <span>{detailsList[item]}</span>
+                          <span>
+                              {item === "marketCapitalization" ? 
+                              `${convertMillionToBillion(details[item])}B` 
+                              : details[item]}
+                          </span>
+                      </li>
+                  })}
+                </ul> 
+              </div>
+              <div className='w-1/2 rounded-md p-2 border-2 bg-white border-neutral-200 overflow-y-scroll'>
+                <ul className='w-full h-full flex flex-col justify-between divide-y-1'>
+                  <li className='flex-1 text-purple-500 flex justify-between items-center'>Watchlist</li>
+                  {Object.keys(detailsList).map((item) => {
+                      return <li key={item} className='flex-1 flex justify-between items-center'>
+                          <span>{detailsList[item]}</span>
+                          <span>
+                              {item === "marketCapitalization" ? 
+                              `${convertMillionToBillion(details[item])}B` 
+                              : details[item]}
+                          </span>
+                      </li>
+                  })}
+                </ul> 
+                
+              </div>
+            </div>
+            
+          </Card>
         </div>
       
+      </>
       
-      </Card>
       
     );
 }
