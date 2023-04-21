@@ -101,10 +101,10 @@ const BuyStock = ({symbol, price, details}) => {
  
     return (
       <>
-        <div className='col-span-2 md:col-span-1 xl:col-span-1 row-span-2'>
+        <div className='col-span-1 md:col-span-1 xl:col-span-1 row-span-2 md:h-full xl:h-full '>
           <Card>
           
-            <div className='w-full h-full flex flex-col justify-between'>
+            <div className='w-full h-full flex flex-col justify-between overflow-y-scroll p-2'>
               <div className='w-full flex flex-row justify-between'>
                 <h1 className="text-purple-500">{symbol}</h1>
                 <h1>${price}</h1>
@@ -144,30 +144,33 @@ const BuyStock = ({symbol, price, details}) => {
             </div>
           </Card>
         </div>
+        
 
-        <div className='col-span-2 row-span-2'>   
+        <div className='col-span-1 row-span-2'>   
           <Card>
-            <div className='w-full h-full flex flex-row justify-between gap-6'>
-              <div className='w-1/2 rounded-md p-2 border-2 bg-white border-neutral-200 overflow-y-scroll'>
-                <ul className='w-full h-full flex flex-col justify-between divide-y-1'>
-                  <li className='flex-1 flex justify-between items-center'>
-                    <span className='text-purple-500'>Portfolio</span>
-                    <span className='text-purple-500'>Total: ${price}</span>
+            <ul className='w-full h-full flex flex-col justify-between divide-y-1 overflow-y-scroll pr-2'>
+              <li className='flex-1 flex justify-between items-center'>
+                <span className='text-purple-500'>Portfolio</span>
+                <span className=''>Total: ${price}</span>
+              </li>
+              {Object.keys(detailsList).map((item) => {
+                  return <li key={item} className='flex-1 flex justify-between items-center'>
+                      <span>{detailsList[item]}</span>
+                      <span>
+                          {item === "marketCapitalization" ? 
+                          `${convertMillionToBillion(details[item])}B` 
+                          : details[item]}
+                      </span>
                   </li>
-                  {Object.keys(detailsList).map((item) => {
-                      return <li key={item} className='flex-1 flex justify-between items-center'>
-                          <span>{detailsList[item]}</span>
-                          <span>
-                              {item === "marketCapitalization" ? 
-                              `${convertMillionToBillion(details[item])}B` 
-                              : details[item]}
-                          </span>
-                      </li>
-                  })}
-                </ul> 
-              </div>
-              <div className='w-1/2 rounded-md p-2 border-2 bg-white border-neutral-200 overflow-y-scroll'>
-                <ul className='w-full h-full flex flex-col justify-between divide-y-1'>
+              })}
+            </ul> 
+          </Card>
+        </div>
+
+        <div className='col-span-1 row-span-2'>
+          <Card>
+              
+                <ul className='w-full h-full flex flex-col justify-between divide-y-1 overflow-y-scroll pr-2'>
                   <li className='flex-1 text-purple-500 flex justify-between items-center'>Watchlist</li>
                   {Object.keys(detailsList).map((item) => {
                       return <li key={item} className='flex-1 flex justify-between items-center'>
@@ -180,10 +183,7 @@ const BuyStock = ({symbol, price, details}) => {
                       </li>
                   })}
                 </ul> 
-                
-              </div>
-            </div>
-            
+              
           </Card>
         </div>
       
