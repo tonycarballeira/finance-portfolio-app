@@ -45,7 +45,7 @@ const Dashboard = () => {
 
   return (
     <>
-    <div className="h-screen grid md:mt-1 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 
+    <div className="h-[120vh] md:h-screen xl:h-screen grid md:mt-1 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 
     grid-rows-8 md:grid-rows-7 xl:grid-rows-5 auto-rows-fr gap-6 pt-10 pl-10 pr-10 font-quicksand bg-neutral-100">
       <div className='col-span-1 md:col-span-2 xl:col-span-3 row-span-1 flex justify-start items-center'>
         <Header name={stockDetails.name}/>
@@ -68,10 +68,10 @@ const Dashboard = () => {
     </div>
 
     {cookies.access_token ? (
-        <div className="h-screen grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 
+        <div className="h-[150vh] md:h-screen xl:h-screen grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 
           grid-rows-3 md:grid-rows-3 xl:grid-rows-3 auto-rows-fr gap-6 pt-5 pl-10 p-10 font-quicksand bg-neutral-100">
                  
-          <BuyStock symbol={stockDetails.name} price={quote.pc} details={stockDetails}/>
+          <BuyStock symbol={stockDetails.name} price={quote.pc} details={stockDetails} name={stockSymbol}/>
 
           {/* <div className='col-span-2 md:col-span-1 xl:col-span-1 row-span-2'>  
           </div> */}      

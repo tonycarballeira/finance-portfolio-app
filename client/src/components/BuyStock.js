@@ -6,9 +6,8 @@ import { useGetUserID } from '../hooks/useGetUserID';
 import { useNavigate } from "react-router-dom";
 import Card from './card/Card';
 
-const BuyStock = ({symbol, price, details}) => {
-    // const [stockName, setStockName] = useState(symbol);
-    // const [stockPrice, setStockPrice] = useState(price);
+const BuyStock = ({symbol, price, details, name}) => {
+
     const userID = useGetUserID();
     const [cookies, _] = useCookies(["access_token"]);
 
@@ -37,11 +36,6 @@ const BuyStock = ({symbol, price, details}) => {
         };
         fetchBuys();
     }, []);
-  
-    // const handleChange = (event) => {
-    //   const quantity = event.target.value;
-      
-    // };
 
     const handleChange = (event) => {
       const value = Number(event.target.value);
@@ -104,9 +98,9 @@ const BuyStock = ({symbol, price, details}) => {
         <div className='col-span-1 md:col-span-1 xl:col-span-1 row-span-2 md:h-full xl:h-full '>
           <Card>
           
-            <div className='w-full h-full flex flex-col justify-between overflow-y-scroll p-2'>
+            <div className='w-full h-full flex flex-col justify-between'>
               <div className='w-full flex flex-row justify-between'>
-                <h1 className="text-purple-500">{symbol}</h1>
+                <h1 className="text-purple-500">{name}</h1>
                 <h1>${price}</h1>
               </div>
               <form onSubmit={handleSubmit}>
@@ -153,15 +147,13 @@ const BuyStock = ({symbol, price, details}) => {
                 <span className='text-purple-500'>Portfolio</span>
                 <span className=''>Total: ${price}</span>
               </li>
-              {Object.keys(detailsList).map((item) => {
-                  return <li key={item} className='flex-1 flex justify-between items-center'>
-                      <span>{detailsList[item]}</span>
-                      <span>
-                          {item === "marketCapitalization" ? 
-                          `${convertMillionToBillion(details[item])}B` 
-                          : details[item]}
-                      </span>
-                  </li>
+              {purchasedStocks.map((stock) => {
+                  return <li key={stock} className='flex-1 flex justify-between items-center'>
+                  <span>{stock.name}</span>
+                  <span>
+                      {stock.purchases[0].price * stock.purchases[0].quantity}
+                  </span>
+                </li>
               })}
             </ul> 
           </Card>
@@ -171,7 +163,11 @@ const BuyStock = ({symbol, price, details}) => {
           <Card>
               
                 <ul className='w-full h-full flex flex-col justify-between divide-y-1 overflow-y-scroll pr-2'>
-                  <li className='flex-1 text-purple-500 flex justify-between items-center'>Watchlist</li>
+                <li className='flex-1 flex justify-between items-center'>
+                  <span className='text-purple-500'>Watchlist</span>
+                  <span className=''>ADD: </span>
+                </li>
+                
                   {Object.keys(detailsList).map((item) => {
                       return <li key={item} className='flex-1 flex justify-between items-center'>
                           <span>{detailsList[item]}</span>
