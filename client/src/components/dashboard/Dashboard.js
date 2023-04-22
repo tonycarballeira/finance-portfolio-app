@@ -72,12 +72,7 @@ const Dashboard = () => {
           grid-rows-3 md:grid-rows-3 xl:grid-rows-3 auto-rows-fr gap-6 pt-5 pl-10 p-10 font-quicksand bg-neutral-100">
                  
           <BuyStock symbol={stockDetails.name} price={quote.pc} details={stockDetails} name={stockSymbol}/>
-
-          {/* <div className='col-span-2 md:col-span-1 xl:col-span-1 row-span-2'>  
-          </div> */}      
-          {/* <div className='col-span-2 row-span-2'>   
-            <Details details={stockDetails}/>
-          </div> */}          
+        
         </div>
 
     ) 

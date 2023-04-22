@@ -74,7 +74,7 @@ router.delete("/stocksPurchased/id", async (req, res) => {
 // STOCK BUY / SELL
 
 router.put("/buy", async (req, res) => {
-    console.log("hello");
+    console.log(req.body);
     const price = req.body.purchases[0].price;
     const quantity = req.body.purchases[0].quantity;
 

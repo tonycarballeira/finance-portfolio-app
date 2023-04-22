@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 import Card from './card/Card';
 
 const BuyStock = ({symbol, price, details, name}) => {
-
+    // const [s_price, setS_price] = useState(price);
+    // const [s_symbol, setS_symbol] = useState(symbol);
     const userID = useGetUserID();
     const [cookies, _] = useCookies(["access_token"]);
 
@@ -29,7 +30,7 @@ const BuyStock = ({symbol, price, details, name}) => {
           try {
             const response = await axios.get(`http://localhost:3001/stocks/${userID}`);
             setPurchasedStocks(response.data);
-
+            console.log(purchasedStocks);
           } catch (err) {
             console.log(err);
           }
@@ -43,11 +44,19 @@ const BuyStock = ({symbol, price, details, name}) => {
       const purchases = [...stock.purchases];
       
       purchases[0].quantity = value;
+      purchases[0].price = price;
       setStock({ ...stock, purchases });
     };
   
     const handleSubmit = async (event) => {
+
       event.preventDefault();
+      const purchases = [...stock.purchases];
+      purchases[0].price = price;
+      stock.name = symbol;
+      setStock({...stock});
+      setStock({ ...stock, purchases });
+
       try {
         if (purchasedStocks.filter(e => e.name === symbol).length > 0) {
           await axios.put(
@@ -97,7 +106,7 @@ const BuyStock = ({symbol, price, details, name}) => {
       <>
         <div className='col-span-1 md:col-span-1 xl:col-span-1 row-span-2 md:h-full xl:h-full '>
           <Card>
-          
+
             <div className='w-full h-full flex flex-col justify-between'>
               <div className='w-full flex flex-row justify-between'>
                 <h1 className="text-purple-500">{name}</h1>
@@ -111,7 +120,7 @@ const BuyStock = ({symbol, price, details, name}) => {
                   className="shadow appearance-none border border-teal-500 rounded w-full py-2 
                   px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" placeholder="Amount">
                 </input>
-                <button className="flex-shrink-0 bg-teal-500 hover:bg-teal-600 border-teal-500 hover:border-teal-700 text-sm border-4 text-black py-1 px-2 rounded" type="button">
+                <button className="flex-shrink-0 bg-teal-500 hover:bg-teal-600 border-teal-500 hover:border-teal-700 text-sm border-4 text-black py-1 px-2 rounded" type="submit">
                   Buy
                 </button>
               </form>
@@ -142,43 +151,83 @@ const BuyStock = ({symbol, price, details, name}) => {
 
         <div className='col-span-1 row-span-2'>   
           <Card>
-            <ul className='w-full h-full flex flex-col justify-between divide-y-1 overflow-y-scroll pr-2'>
-              <li className='flex-1 flex justify-between items-center'>
-                <span className='text-purple-500'>Portfolio</span>
-                <span className=''>Total: ${price}</span>
-              </li>
-              {purchasedStocks.map((stock) => {
-                  return <li key={stock} className='flex-1 flex justify-between items-center'>
-                  <span>{stock.name}</span>
-                  <span>
-                      {stock.purchases[0].price * stock.purchases[0].quantity}
-                  </span>
-                </li>
-              })}
-            </ul> 
+            <div className='w-full flex flex-row justify-between'>
+              <h1 className="text-purple-500">Portfolio</h1>
+              <span><span className='text-purple-500'>Total:</span> ${price}</span>
+            </div>
+            
+            <div class="flex flex-col justify-between w-full h-full">
+              <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                  <div class="overflow-hidden">
+                    <table class="min-w-full text-left text-sm font-light">
+                     
+                      <thead
+                        class="border-b bg-white font-medium ">
+                        <tr>           
+                          <th scope="col" class="px-6 py-4 text-purple-500">Stock</th>
+                          <th scope="col" class="px-6 py-4 text-purple-500">Shares</th>
+                          <th scope="col" class="px-6 py-4 text-purple-500">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        {purchasedStocks.map((stock) => {
+                          return <tr class="border-b bg-neutral-100 ">
+                            <td class="whitespace-nowrap px-6 py-4 font-medium">{stock.name}</td>
+                            <td class="whitespace-nowrap px-6 py-4">{stock.purchases[0].quantity}</td>
+                            <td class="whitespace-nowrap px-6 py-4">{price * stock.purchases[0].quantity}</td>  
+                          </tr>
+                        })} 
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+
+            
           </Card>
         </div>
 
         <div className='col-span-1 row-span-2'>
           <Card>
+            <div className='w-full flex flex-row justify-between'>
+              <h1 className="text-purple-500">Watchlist</h1>
+              <span><span className='text-purple-500'>ADD:</span> ${price}</span>
+            </div>
               
-                <ul className='w-full h-full flex flex-col justify-between divide-y-1 overflow-y-scroll pr-2'>
-                <li className='flex-1 flex justify-between items-center'>
-                  <span className='text-purple-500'>Watchlist</span>
-                  <span className=''>ADD: </span>
-                </li>
-                
-                  {Object.keys(detailsList).map((item) => {
-                      return <li key={item} className='flex-1 flex justify-between items-center'>
-                          <span>{detailsList[item]}</span>
-                          <span>
-                              {item === "marketCapitalization" ? 
-                              `${convertMillionToBillion(details[item])}B` 
-                              : details[item]}
-                          </span>
-                      </li>
-                  })}
-                </ul> 
+            <div class="flex flex-col justify-between w-full h-full">
+              <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                  <div class="overflow-hidden">
+                    <table class="min-w-full text-left text-sm font-light">
+                     
+                      <thead
+                        class="border-b bg-white font-medium ">
+                        <tr>           
+                          <th scope="col" class="px-6 py-4 text-purple-500">Stock</th>
+                          <th scope="col" class="px-6 py-4 text-purple-500">Shares</th>
+                          <th scope="col" class="px-6 py-4 text-purple-500">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        {purchasedStocks.map((stock) => {
+                          return <tr class="border-b bg-neutral-100 ">
+                            <td class="whitespace-nowrap px-6 py-4 font-medium">{stock.name}</td>
+                            <td class="whitespace-nowrap px-6 py-4">{stock.purchases[0].quantity}</td>
+                            <td class="whitespace-nowrap px-6 py-4">{price * stock.purchases[0].quantity}</td>  
+                          </tr>
+                        })} 
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
               
           </Card>
         </div>
