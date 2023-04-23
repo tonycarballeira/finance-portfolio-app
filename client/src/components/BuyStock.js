@@ -13,6 +13,8 @@ const BuyStock = ({symbol, price, details, name}) => {
     const [cookies, _] = useCookies(["access_token"]);
 
     const [purchasedStocks, setPurchasedStocks] = useState([]);
+
+    const [sumTotal, setSumTotal] = useState(0);
     
     const [stock, setStock] = useState({
       name: symbol,
@@ -34,7 +36,16 @@ const BuyStock = ({symbol, price, details, name}) => {
           }
         };
 
+        const calcTotal = async () => {
+          let sum = 0;
+          purchasedStocks.map((x) => {
+            sum = sum + x.value;
+          });
+          setSumTotal(sum);
+        }
+
         fetchBuys();
+        calcTotal();
     }, []);
 
     const handleChange = (event) => {
@@ -66,9 +77,19 @@ const BuyStock = ({symbol, price, details, name}) => {
               headers: { authorization: cookies.access_token },
             }
           );   
-          let theStock = purchasedStocks.filter(e => e.name === symbol)[0];
-          console.log(theStock);
+         
+          const total = stock.quantity * price;  
+          const stocks = [...purchasedStocks];
+
+          stocks.map((x) => {
+            if(x.name == symbol) {
+              x.quantity = x.quantity + stock.quantity;
+              x.value = x.value + total;
+            }
+          })
           
+          setPurchasedStocks(stocks); 
+          setSumTotal(sumTotal => sumTotal + total);        
           alert("Stock Purchased");
         } else {
           
@@ -79,7 +100,9 @@ const BuyStock = ({symbol, price, details, name}) => {
               headers: { authorization: cookies.access_token },
             }
           );
+          const total = stock.quantity * price;
           setPurchasedStocks(purchasedStocks => [...purchasedStocks, stock]);
+          setSumTotal(sumTotal => sumTotal + total);
           console.log(purchasedStocks);
           alert("Stock Purchased");
         }
@@ -155,7 +178,7 @@ const BuyStock = ({symbol, price, details, name}) => {
           <Card>
             <div className='w-full flex flex-row justify-between'>
               <h1 className="text-purple-500">Portfolio</h1>
-              <span><span className='text-purple-500'>Total:</span> ${price}</span>
+              <span><span className='text-purple-500'>Total:</span> ${sumTotal}</span>
             </div>
             
             <div class="flex flex-col justify-between w-full h-full">
@@ -178,7 +201,7 @@ const BuyStock = ({symbol, price, details, name}) => {
                           return <tr class="border-b bg-neutral-100 ">
                             <td class="whitespace-nowrap px-6 py-4 font-medium">{stock.name}</td>
                             <td class="whitespace-nowrap px-6 py-4">{stock.quantity}</td>
-                            <td class="whitespace-nowrap px-6 py-4">${(Math.round((price * stock.quantity) * 100) / 100).toFixed(2)}</td>  
+                            <td class="whitespace-nowrap px-6 py-4">${(Math.round((stock.value) * 100) / 100).toFixed(2)}</td>  
                           </tr>
                         })} 
                       </tbody>
