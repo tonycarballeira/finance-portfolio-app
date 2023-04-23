@@ -75,12 +75,14 @@ router.delete("/stocksPurchased/id", async (req, res) => {
 
 router.put("/buy", async (req, res) => {
     console.log(req.body);
-    const price = req.body.purchases[0].price;
-    const quantity = req.body.purchases[0].quantity;
+    const quantity = req.body.quantity;
+    const value = req.body.value * quantity;
 
     try {
         const stock = await StockModel.findOne({userOwner: req.body.userID, name: req.body.name});
-        stock.purchases.push({price: price, quantity: quantity});
+        // stock.purchases.push({price: price, quantity: quantity});
+        stock.quantity = stock.quantity + quantity;
+        stock.value = stock.value + value;
         await stock.save();
         res.json({stock});
     } catch (err) {

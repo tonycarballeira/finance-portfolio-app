@@ -16,10 +16,8 @@ const BuyStock = ({symbol, price, details, name}) => {
     
     const [stock, setStock] = useState({
       name: symbol,
-      purchases: [{
-        price: price,
-        quantity: 0
-      }],
+      quantity: 0,
+      value: price,
       userOwner: userID   
     });
   
@@ -30,32 +28,34 @@ const BuyStock = ({symbol, price, details, name}) => {
           try {
             const response = await axios.get(`http://localhost:3001/stocks/${userID}`);
             setPurchasedStocks(response.data);
-            console.log(purchasedStocks);
+            
           } catch (err) {
             console.log(err);
           }
         };
+
         fetchBuys();
     }, []);
 
     const handleChange = (event) => {
       const value = Number(event.target.value);
       
-      const purchases = [...stock.purchases];
-      
-      purchases[0].quantity = value;
-      purchases[0].price = price;
-      setStock({ ...stock, purchases });
+      // const purchases = [...stock.purchases];
+      // purchases[0].quantity = value;
+      // purchases[0].price = price;
+      stock.quantity = value;
+      setStock({ ...stock});
     };
   
     const handleSubmit = async (event) => {
 
       event.preventDefault();
-      const purchases = [...stock.purchases];
-      purchases[0].price = price;
+      // const purchases = [...stock.purchases];
+      // purchases[0].price = price;
       stock.name = symbol;
+      stock.value = price;
       setStock({...stock});
-      setStock({ ...stock, purchases });
+      // setStock({ ...stock, purchases });
 
       try {
         if (purchasedStocks.filter(e => e.name === symbol).length > 0) {
@@ -65,7 +65,9 @@ const BuyStock = ({symbol, price, details, name}) => {
             {
               headers: { authorization: cookies.access_token },
             }
-          );     
+          );   
+          let theStock = purchasedStocks.filter(e => e.name === symbol)[0];
+          console.log(theStock);
           
           alert("Stock Purchased");
         } else {
@@ -175,8 +177,8 @@ const BuyStock = ({symbol, price, details, name}) => {
                         {purchasedStocks.map((stock) => {
                           return <tr class="border-b bg-neutral-100 ">
                             <td class="whitespace-nowrap px-6 py-4 font-medium">{stock.name}</td>
-                            <td class="whitespace-nowrap px-6 py-4">{stock.purchases[0].quantity}</td>
-                            <td class="whitespace-nowrap px-6 py-4">{price * stock.purchases[0].quantity}</td>  
+                            <td class="whitespace-nowrap px-6 py-4">{stock.quantity}</td>
+                            <td class="whitespace-nowrap px-6 py-4">${(Math.round((price * stock.quantity) * 100) / 100).toFixed(2)}</td>  
                           </tr>
                         })} 
                       </tbody>
@@ -217,8 +219,8 @@ const BuyStock = ({symbol, price, details, name}) => {
                         {purchasedStocks.map((stock) => {
                           return <tr class="border-b bg-neutral-100 ">
                             <td class="whitespace-nowrap px-6 py-4 font-medium">{stock.name}</td>
-                            <td class="whitespace-nowrap px-6 py-4">{stock.purchases[0].quantity}</td>
-                            <td class="whitespace-nowrap px-6 py-4">{price * stock.purchases[0].quantity}</td>  
+                            <td class="whitespace-nowrap px-6 py-4">{stock.quantity}</td>
+                            <td class="whitespace-nowrap px-6 py-4">${(Math.round((price * stock.quantity) * 100) / 100).toFixed(2)}</td>  
                           </tr>
                         })} 
                       </tbody>

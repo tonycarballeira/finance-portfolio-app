@@ -9,7 +9,7 @@ import StockContext from './context/StockContext';
 
 function App() {
 
-  const [stockSymbol, setStockSymbol] = useState("");
+  const [stockSymbol, setStockSymbol] = useState("GOOGL");
 
   return (
     <div className="App">
