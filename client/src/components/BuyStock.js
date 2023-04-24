@@ -1,10 +1,11 @@
-import React from 'react'
-import { useState, useEffect } from 'react';
+import React from 'react';
+import { useState, useEffect, componentDidMount } from 'react';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';  
 import { useGetUserID } from '../hooks/useGetUserID';
 import { useNavigate } from "react-router-dom";
 import Card from './card/Card';
+import { fetchQuote } from '../api/stock-api';
 
 const BuyStock = ({symbol, price, details, name}) => {
     // const [s_price, setS_price] = useState(price);
@@ -18,6 +19,8 @@ const BuyStock = ({symbol, price, details, name}) => {
     
     const [stock, setStock] = useState({
       name: symbol,
+      symbol: name,
+      currentPrice: 0,
       quantity: 0,
       value: price,
       userOwner: userID   
@@ -29,6 +32,15 @@ const BuyStock = ({symbol, price, details, name}) => {
         const fetchBuys = async () => {
           try {
             const response = await axios.get(`http://localhost:3001/stocks/${userID}`);
+            
+            // let stocks = response.data;
+            
+            // stocks.map((x) => {           
+            //   apiCall(x.symbol).then((result) => {
+            //     x.currentPrice = result.pc;                           
+            //   });         
+            // });
+
             setPurchasedStocks(response.data);
             
           } catch (err) {
@@ -36,37 +48,46 @@ const BuyStock = ({symbol, price, details, name}) => {
           }
         };
 
+        const apiCall = async (sym) => {
+          try {
+            const result =  await fetchQuote(sym);
+            return result;
+          }catch (err){  
+            console.log(err);
+          }
+
+        };
+
+        
+
         const calcTotal = async () => {
           let sum = 0;
           purchasedStocks.map((x) => {
             sum = sum + x.value;
           });
           setSumTotal(sum);
-        }
+        };
 
         fetchBuys();
         calcTotal();
-    }, []);
+        
+    },[]);
 
     const handleChange = (event) => {
+
       const value = Number(event.target.value);
-      
-      // const purchases = [...stock.purchases];
-      // purchases[0].quantity = value;
-      // purchases[0].price = price;
       stock.quantity = value;
       setStock({ ...stock});
+      console.log(purchasedStocks);
     };
   
     const handleSubmit = async (event) => {
 
       event.preventDefault();
-      // const purchases = [...stock.purchases];
-      // purchases[0].price = price;
       stock.name = symbol;
       stock.value = price;
+      stock.symbol = name;
       setStock({...stock});
-      // setStock({ ...stock, purchases });
 
       try {
         if (purchasedStocks.filter(e => e.name === symbol).length > 0) {
@@ -126,7 +147,7 @@ const BuyStock = ({symbol, price, details, name}) => {
   const convertMillionToBillion = (number) => {
       return ( number / 1000).toFixed(2);
   };
- 
+  
     return (
       <>
         <div className='col-span-1 md:col-span-1 xl:col-span-1 row-span-2 md:h-full xl:h-full '>
@@ -178,7 +199,7 @@ const BuyStock = ({symbol, price, details, name}) => {
           <Card>
             <div className='w-full flex flex-row justify-between'>
               <h1 className="text-purple-500">Portfolio</h1>
-              <span><span className='text-purple-500'>Total:</span> ${sumTotal}</span>
+              <span><span className='text-purple-500'>Total:</span> ${(Math.round((sumTotal) * 100) / 100).toFixed(2)}</span>
             </div>
             
             <div class="flex flex-col justify-between w-full h-full">
@@ -201,7 +222,7 @@ const BuyStock = ({symbol, price, details, name}) => {
                           return <tr class="border-b bg-neutral-100 ">
                             <td class="whitespace-nowrap px-6 py-4 font-medium">{stock.name}</td>
                             <td class="whitespace-nowrap px-6 py-4">{stock.quantity}</td>
-                            <td class="whitespace-nowrap px-6 py-4">${(Math.round((stock.value) * 100) / 100).toFixed(2)}</td>  
+                            <td class="whitespace-nowrap px-6 py-4">${(Math.round(stock.value * 100) / 100).toFixed(2)}</td>  
                           </tr>
                         })} 
                       </tbody>
