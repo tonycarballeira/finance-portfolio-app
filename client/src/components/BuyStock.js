@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, componentDidMount } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';  
 import { useGetUserID } from '../hooks/useGetUserID';
@@ -10,6 +10,7 @@ import { fetchQuote } from '../api/stock-api';
 const BuyStock = ({symbol, price, details, name}) => {
     // const [s_price, setS_price] = useState(price);
     // const [s_symbol, setS_symbol] = useState(symbol);
+    const stateRef = React.useRef().current
     const userID = useGetUserID();
     const [cookies, _] = useCookies(["access_token"]);
 
@@ -56,22 +57,21 @@ const BuyStock = ({symbol, price, details, name}) => {
             console.log(err);
           }
 
-        };
+        };     
 
-        
-
-        const calcTotal = async () => {
-          let sum = 0;
-          purchasedStocks.map((x) => {
-            sum = sum + x.value;
-          });
-          setSumTotal(sum);
-        };
+        // const calcTotal = () => {
+        //   let sum = 0;
+        //   purchasedStocks.map((x) => {
+        //     sum = sum + x.value;
+        //   });
+        //   setSumTotal(sum);
+          
+        // };
 
         fetchBuys();
-        calcTotal();
+        // calcTotal();
         
-    },[]);
+    }, []);
 
     const handleChange = (event) => {
 
@@ -219,6 +219,7 @@ const BuyStock = ({symbol, price, details, name}) => {
                       <tbody>
 
                         {purchasedStocks.map((stock) => {
+              
                           return <tr class="border-b bg-neutral-100 ">
                             <td class="whitespace-nowrap px-6 py-4 font-medium">{stock.name}</td>
                             <td class="whitespace-nowrap px-6 py-4">{stock.quantity}</td>
