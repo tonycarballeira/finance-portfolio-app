@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';  
 import { useGetUserID } from '../hooks/useGetUserID';
@@ -34,15 +34,17 @@ const BuyStock = ({symbol, price, details, name}) => {
           try {
             const response = await axios.get(`http://localhost:3001/stocks/${userID}`);
             
-            // let stocks = response.data;
+            let stocks = response.data;
             
-            // stocks.map((x) => {           
-            //   apiCall(x.symbol).then((result) => {
-            //     x.currentPrice = result.pc;                           
-            //   });         
-            // });
-
-            setPurchasedStocks(response.data);
+            stocks.map(async(x)  => {           
+              apiCall(x.symbol).then((result) => {
+                x.cats = result.pc;                           
+              });     
+              console.log(x, "hilo");    
+            });
+            console.log(stocks, "cats");
+            setPurchasedStocks(stocks);
+            
             
           } catch (err) {
             console.log(err);
@@ -59,26 +61,32 @@ const BuyStock = ({symbol, price, details, name}) => {
 
         };     
 
-        // const calcTotal = () => {
-        //   let sum = 0;
-        //   purchasedStocks.map((x) => {
-        //     sum = sum + x.value;
-        //   });
-        //   setSumTotal(sum);
-          
-        // };
-
         fetchBuys();
-        // calcTotal();
         
     }, []);
+
+  useEffect(()   => {
+   
+    let sum = 0;
+    purchasedStocks.map((x) => {
+      sum = sum + x.value;
+    });
+    setSumTotal(sum);
+      
+  }, [purchasedStocks]);
+
+
+
+    console.log(stock);
+
+    
 
     const handleChange = (event) => {
 
       const value = Number(event.target.value);
       stock.quantity = value;
       setStock({ ...stock});
-      console.log(purchasedStocks);
+      console.log(sumTotal);
     };
   
     const handleSubmit = async (event) => {
@@ -147,6 +155,10 @@ const BuyStock = ({symbol, price, details, name}) => {
   const convertMillionToBillion = (number) => {
       return ( number / 1000).toFixed(2);
   };
+  if(purchasedStocks.length > 0){
+    console.log(purchasedStocks[0]["currentPrice"], purchasedStocks[0], "dogs");
+    console.log(Object.keys(purchasedStocks[0]), "birds");
+  }
   
     return (
       <>
@@ -219,11 +231,18 @@ const BuyStock = ({symbol, price, details, name}) => {
                       <tbody>
 
                         {purchasedStocks.map((stock) => {
-              
+                          console.log(stock,"this is my stock");
+                          console.log(stock.currentPrice);
+                          console.log(stock.quantity);
+                          console.log(stock.name);
+                          console.log(stock.cats, "happening");
+                          
+
                           return <tr class="border-b bg-neutral-100 ">
                             <td class="whitespace-nowrap px-6 py-4 font-medium">{stock.name}</td>
                             <td class="whitespace-nowrap px-6 py-4">{stock.quantity}</td>
-                            <td class="whitespace-nowrap px-6 py-4">${(Math.round(stock.value * 100) / 100).toFixed(2)}</td>  
+                
+                            <td class="whitespace-nowrap px-6 py-4">${(Math.round((stock.currentPrice * stock.quantity) * 100) / 100).toFixed(2)}</td>  
                           </tr>
                         })} 
                       </tbody>
