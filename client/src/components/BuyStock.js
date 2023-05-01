@@ -34,16 +34,8 @@ const BuyStock = ({symbol, price, details, name}) => {
           try {
             const response = await axios.get(`http://localhost:3001/stocks/${userID}`);
             
-            let stocks = response.data;
             
-            stocks.map(async(x)  => {           
-              apiCall(x.symbol).then((result) => {
-                x.cats = result.pc;                           
-              });     
-              console.log(x, "hilo");    
-            });
-            console.log(stocks, "cats");
-            setPurchasedStocks(stocks);
+            setPurchasedStocks(response.data);
             
             
           } catch (err) {
@@ -76,17 +68,11 @@ const BuyStock = ({symbol, price, details, name}) => {
   }, [purchasedStocks]);
 
 
-
-    console.log(stock);
-
-    
-
     const handleChange = (event) => {
 
       const value = Number(event.target.value);
       stock.quantity = value;
       setStock({ ...stock});
-      console.log(sumTotal);
     };
   
     const handleSubmit = async (event) => {
@@ -132,7 +118,6 @@ const BuyStock = ({symbol, price, details, name}) => {
           const total = stock.quantity * price;
           setPurchasedStocks(purchasedStocks => [...purchasedStocks, stock]);
           setSumTotal(sumTotal => sumTotal + total);
-          console.log(purchasedStocks);
           alert("Stock Purchased");
         }
       } catch (error) {
@@ -155,10 +140,6 @@ const BuyStock = ({symbol, price, details, name}) => {
   const convertMillionToBillion = (number) => {
       return ( number / 1000).toFixed(2);
   };
-  if(purchasedStocks.length > 0){
-    console.log(purchasedStocks[0]["currentPrice"], purchasedStocks[0], "dogs");
-    console.log(Object.keys(purchasedStocks[0]), "birds");
-  }
   
     return (
       <>
@@ -230,19 +211,13 @@ const BuyStock = ({symbol, price, details, name}) => {
                       </thead>
                       <tbody>
 
-                        {purchasedStocks.map((stock) => {
-                          console.log(stock,"this is my stock");
-                          console.log(stock.currentPrice);
-                          console.log(stock.quantity);
-                          console.log(stock.name);
-                          console.log(stock.cats, "happening");
-                          
+                        {purchasedStocks.map((stock) => {         
 
                           return <tr class="border-b bg-neutral-100 ">
                             <td class="whitespace-nowrap px-6 py-4 font-medium">{stock.name}</td>
                             <td class="whitespace-nowrap px-6 py-4">{stock.quantity}</td>
                 
-                            <td class="whitespace-nowrap px-6 py-4">${(Math.round((stock.currentPrice * stock.quantity) * 100) / 100).toFixed(2)}</td>  
+                            <td class="whitespace-nowrap px-6 py-4">${(Math.round(stock.value * 100) / 100).toFixed(2)}</td>  
                           </tr>
                         })} 
                       </tbody>
